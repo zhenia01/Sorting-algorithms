@@ -19,8 +19,8 @@ public class CombSort implements SortStrategy {
             for (int i = 0; i < arr.length - step; i++) {
                 if (arr[i].compareTo(arr[i + step]) < 0) {
                     Comparable temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
+                    arr[i] = arr[i + step];
+                    arr[i + step] = temp;
                 }
             }
 
@@ -39,8 +39,8 @@ public class CombSort implements SortStrategy {
             for (int i = 0; i < arr.length - step; i++) {
                 if (arr[i].compareTo(arr[i + step]) > 0) {
                     Comparable temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
+                    arr[i] = arr[i + step];
+                    arr[i + step] = temp;
                 }
             }
 
@@ -59,8 +59,8 @@ public class CombSort implements SortStrategy {
             for (int i = 0; i < arr.length - step; i++) {
                 if (comp.compare(arr[i], arr[i + step]) < 0) {
                     Object temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
+                    arr[i] = arr[i + step];
+                    arr[i + step] = temp;
                 }
             }
 
@@ -79,8 +79,8 @@ public class CombSort implements SortStrategy {
             for (int i = 0; i < arr.length - step; i++) {
                 if (comp.compare(arr[i], arr[i + step]) > 0) {
                     Object temp = arr[i];
-                    arr[i] = arr[i + 1];
-                    arr[i + 1] = temp;
+                    arr[i] = arr[i + step];
+                    arr[i + step] = temp;
                 }
             }
 
