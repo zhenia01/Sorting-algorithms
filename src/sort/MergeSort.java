@@ -4,205 +4,112 @@ import java.util.Comparator;
 
 public class MergeSort implements SortStrategy {
 
-    private final InsertionSort insert;
-    public MergeSort () {
-        insert = new InsertionSort();
-    }
-
     @Override
     public void sortDec(Comparable[] arr) {
-        mergeSortDec(arr, 0, arr.length - 1);
+        Comparable[] aux = new Comparable[arr.length];
+        mergeSortDec(arr, aux, 0, arr.length - 1);
     }
 
     @Override
     public void sortInc(Comparable[] arr) {
-        mergeSortInc(arr, 0, arr.length - 1);
+        Comparable[] aux = new Comparable[arr.length];
+        mergeSortInc(arr, aux, 0, arr.length - 1);
     }
 
     @Override
     public void sortDecComp(Object[] arr, Comparator comp) {
-        mergeSortDec(arr, 0, arr.length - 1, comp);
-
+        Object[] aux = new Object[arr.length];
+        mergeSortDecComp(arr, aux, 0, arr.length - 1, comp);
     }
 
     @Override
     public void sortIncComp(Object[] arr, Comparator comp) {
-        mergeSortInc(arr, 0, arr.length - 1, comp);
+        Object[] aux = new Object[arr.length];
+        mergeSortIncComp(arr, aux, 0, arr.length - 1, comp);
     }
 
-    private void mergeSortInc(Comparable[] arr, int begin, int end) {
-
-        if (begin < end) {
-            int mid = begin + (end - begin) / 2;
-            if (end - begin <= 7) {
-                insert.sortInc(arr);
-            } else {
-                mergeSortInc(arr, begin, mid);
-                mergeSortInc(arr, mid + 1, end);
-
-                mergeInc(arr, begin, mid, end);
-            }
+    private void mergeInc(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k];
         }
-    }
-
-    private void mergeInc(Comparable[] arr, int begin, int mid, int end) {
-        Comparable[] temp = new Comparable[arr.length];
-
-        for (int i = begin; i <= end; i++) {
-            temp[i] = arr[i];
-        }
-
-        int leftIndex = begin, rightIndex = mid + 1, globalIndex = begin;
-
-        while (leftIndex <= mid && rightIndex <= end) {
-            if (temp[leftIndex].compareTo(temp[rightIndex]) <= 0) {
-                arr[globalIndex++] = temp[leftIndex++];
-            } else {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        }
-
-        if (leftIndex > mid) {
-            while (rightIndex <= end) {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        } else {
-            while (leftIndex <= mid) {
-                arr[globalIndex++] = temp[leftIndex++];
-            }
-        }
-
-    }
-
-    private void mergeSortInc(Object[] arr, int begin, int end, Comparator comp) {
-
-        if (begin < end) {
-            int mid = begin + (end - begin) / 2;
-            if (end - begin <= 7) {
-                insert.sortIncComp(arr, comp);
-            } else {
-                mergeSortInc(arr, begin, mid, comp);
-                mergeSortInc(arr, mid + 1, end, comp);
-
-                mergeInc(arr, begin, mid, end, comp);
-            }
+        int i = lo, j = mid + 1;
+        for (int k = lo; k <= hi; k++) {
+            if (i > mid) a[k] = aux[j++];
+            else if (j > hi) a[k] = aux[i++];
+            else if (aux[j].compareTo(aux[i]) < 0) a[k] = aux[j++];
+            else a[k] = aux[i++];
         }
     }
 
-    private void mergeInc(Object[] arr, int begin, int mid, int end, Comparator comp) {
-        Object[] temp = new Object[arr.length];
-
-        for (int i = begin; i <= end; i++) {
-            temp[i] = arr[i];
-        }
-
-        int leftIndex = begin, rightIndex = mid + 1, globalIndex = begin;
-
-        while (leftIndex <= mid && rightIndex <= end) {
-            if (comp.compare(temp[leftIndex], temp[rightIndex]) <= 0) {
-                arr[globalIndex++] = temp[leftIndex++];
-            } else {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        }
-
-        if (leftIndex > mid) {
-            while (rightIndex <= end) {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        } else {
-            while (leftIndex <= mid) {
-                arr[globalIndex++] = temp[leftIndex++];
-            }
-        }
-
+    private void mergeSortInc(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        mergeSortInc(a, aux, lo, mid);
+        mergeSortInc(a, aux, mid + 1, hi);
+        mergeInc(a, aux, lo, mid, hi);
     }
 
-    private void mergeSortDec(Comparable[] arr, int begin, int end) {
-
-        if (begin < end) {
-            int mid = begin + (end - begin) / 2;
-            if (end - begin <= 7) {
-                insert.sortDec(arr);
-            } else {
-                mergeSortDec(arr, begin, mid);
-                mergeSortDec(arr, mid + 1, end);
-
-                mergeDec(arr, begin, mid, end);
-            }
+    private void mergeDec(Comparable[] a, Comparable[] aux, int lo, int mid, int hi) {
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        int i = lo, j = mid + 1;
+        for (int k = lo; k <= hi; k++) {
+            if (i > mid) a[k] = aux[j++];
+            else if (j > hi) a[k] = aux[i++];
+            else if (aux[j].compareTo(aux[i]) > 0) a[k] = aux[j++];
+            else a[k] = aux[i++];
         }
     }
 
-    private void mergeDec(Comparable[] arr, int begin, int mid, int end) {
-        Comparable[] temp = new Comparable[arr.length];
-
-        for (int i = begin; i <= end; i++) {
-            temp[i] = arr[i];
-        }
-
-        int leftIndex = begin, rightIndex = mid + 1, globalIndex = begin;
-
-        while (leftIndex <= mid && rightIndex <= end) {
-            if (temp[leftIndex].compareTo(temp[rightIndex]) >= 0) {
-                arr[globalIndex++] = temp[leftIndex++];
-            } else {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        }
-
-        if (leftIndex > mid) {
-            while (rightIndex <= end) {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        } else {
-            while (leftIndex <= mid) {
-                arr[globalIndex++] = temp[leftIndex++];
-            }
-        }
-
+    private void mergeSortDec(Comparable[] a, Comparable[] aux, int lo, int hi) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        mergeSortDec(a, aux, lo, mid);
+        mergeSortDec(a, aux, mid + 1, hi);
+        mergeDec(a, aux, lo, mid, hi);
     }
 
-    private void mergeSortDec(Object[] arr, int begin, int end, Comparator comp) {
-
-        if (begin < end) {
-            int mid = begin + (end - begin) / 2;
-            if (end - begin <= 7) {
-                insert.sortDecComp(arr, comp);
-            } else {
-                mergeSortDec(arr, begin, mid, comp);
-                mergeSortDec(arr, mid + 1, end, comp);
-
-                mergeDec(arr, begin, mid, end, comp);
-            }
+    private void mergeIncComp(Object[] a, Object[] aux, int lo, int mid, int hi, Comparator comp) {
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        int i = lo, j = mid + 1;
+        for (int k = lo; k <= hi; k++) {
+            if (i > mid) a[k] = aux[j++];
+            else if (j > hi) a[k] = aux[i++];
+            else if (comp.compare(aux[j], aux[i]) < 0) a[k] = aux[j++];
+            else a[k] = aux[i++];
         }
     }
 
-    private void mergeDec(Object[] arr, int begin, int mid, int end, Comparator comp) {
-        Object[] temp = new Object[arr.length];
-
-        for (int i = begin; i <= end; i++) {
-            temp[i] = arr[i];
-        }
-
-        int leftIndex = begin, rightIndex = mid + 1, globalIndex = begin;
-
-        while (leftIndex <= mid && rightIndex <= end) {
-            if (comp.compare(temp[leftIndex], temp[rightIndex]) >= 0) {
-                arr[globalIndex++] = temp[leftIndex++];
-            } else {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        }
-
-        if (leftIndex > mid) {
-            while (rightIndex <= end) {
-                arr[globalIndex++] = temp[rightIndex++];
-            }
-        } else {
-            while (leftIndex <= mid) {
-                arr[globalIndex++] = temp[leftIndex++];
-            }
-        }
-
+    private void mergeSortIncComp(Object[] a, Object[] aux, int lo, int hi, Comparator comp) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        mergeSortIncComp(a, aux, lo, mid, comp);
+        mergeSortIncComp(a, aux, mid + 1, hi, comp);
+        mergeIncComp(a, aux, lo, mid, hi, comp);
     }
+
+    private void mergeDecComp(Object[] a, Object[] aux, int lo, int mid, int hi, Comparator comp) {
+        for (int k = lo; k <= hi; k++) {
+            aux[k] = a[k];
+        }
+        int i = lo, j = mid + 1;
+        for (int k = lo; k <= hi; k++) {
+            if (i > mid) a[k] = aux[j++];
+            else if (j > hi) a[k] = aux[i++];
+            else if (comp.compare(aux[j], aux[i]) > 0) a[k] = aux[j++];
+            else a[k] = aux[i++];
+        }
+    }
+
+    private void mergeSortDecComp(Object[] a, Object[] aux, int lo, int hi, Comparator comp) {
+        if (hi <= lo) return;
+        int mid = lo + (hi - lo) / 2;
+        mergeSortDecComp(a, aux, lo, mid, comp);
+        mergeSortDecComp(a, aux, mid + 1, hi, comp);
+        mergeDecComp(a, aux, lo, mid, hi, comp);
+    }
+
 }
