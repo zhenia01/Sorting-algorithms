@@ -180,58 +180,43 @@ public class QuickSort implements SortStrategy {
 
     }
 
-    private void insertionSortInc(Comparable[] arr, int begin, int end) {
-        for (int i = begin; i <= end; i++) {
-            int j = i;
 
-            while (j != 0 && arr[j].compareTo(arr[j - 1]) < 0) {
-                Comparable temp = arr[j - 1];
-                arr[j - 1] = arr[j];
-                arr[j] = temp;
-
-                j--;
+    public void insertionSortInc(Comparable[] arr, int begin, int end) {
+        for (int i = begin + 1; i < end; i++) {
+            for (int j = i; j > begin && arr[j].compareTo(arr[j-1]) < 0; j--) {
+                Comparable temp = arr[j];
+                arr[j] = arr[j-1];
+                arr[j-1] = temp;
             }
         }
     }
 
     private void insertionSortDec(Comparable[] arr, int begin, int end) {
-        for (int i = begin; i <= end; i++) {
-            int j = i;
-
-            while (j != 0 && arr[j].compareTo(arr[j - 1]) > 0) {
-                Comparable temp = arr[j - 1];
-                arr[j - 1] = arr[j];
-                arr[j] = temp;
-
-                j--;
+        for (int i = begin + 1; i < end; i++) {
+            for (int j = i; j > begin && arr[j].compareTo(arr[j-1]) > 0; j--) {
+                Comparable temp = arr[j];
+                arr[j] = arr[j-1];
+                arr[j-1] = temp;
             }
         }
     }
 
     private void insertionSortInc(Object[] arr, Comparator comp, int begin, int end) {
-        for (int i = begin; i <= end; i++) {
-            int j = i;
-
-            while (j != 0 && comp.compare(arr[j], arr[j - 1]) < 0) {
-                Object temp = arr[j - 1];
-                arr[j - 1] = arr[j];
-                arr[j] = temp;
-
-                j--;
+        for (int i = begin + 1; i < end; i++) {
+            for (int j = i; j > begin && comp.compare(arr[j], arr[j-1]) < 0; j--) {
+                Object temp = arr[j];
+                arr[j] = arr[j-1];
+                arr[j-1] = temp;
             }
         }
     }
 
     private void insertionSortDec(Object[] arr, Comparator comp, int begin, int end) {
-        for (int i = begin; i <= end; i++) {
-            int j = i;
-
-            while (j != 0 && comp.compare(arr[j], arr[j - 1]) > 0) {
-                Object temp = arr[j - 1];
-                arr[j - 1] = arr[j];
-                arr[j] = temp;
-
-                j--;
+        for (int i = begin + 1; i < end; i++) {
+            for (int j = i; j > begin && comp.compare(arr[j], arr[j-1]) > 0; j--) {
+                Object temp = arr[j];
+                arr[j] = arr[j-1];
+                arr[j-1] = temp;
             }
         }
     }
