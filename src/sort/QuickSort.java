@@ -182,7 +182,7 @@ public class QuickSort implements SortStrategy {
 
 
     public void insertionSortInc(Comparable[] arr, int begin, int end) {
-        for (int i = begin + 1; i < end; i++) {
+        for (int i = begin + 1; i <= end; i++) {
             for (int j = i; j > begin && arr[j].compareTo(arr[j-1]) < 0; j--) {
                 Comparable temp = arr[j];
                 arr[j] = arr[j-1];
@@ -192,7 +192,7 @@ public class QuickSort implements SortStrategy {
     }
 
     private void insertionSortDec(Comparable[] arr, int begin, int end) {
-        for (int i = begin + 1; i < end; i++) {
+        for (int i = begin + 1; i <= end; i++) {
             for (int j = i; j > begin && arr[j].compareTo(arr[j-1]) > 0; j--) {
                 Comparable temp = arr[j];
                 arr[j] = arr[j-1];
@@ -202,7 +202,7 @@ public class QuickSort implements SortStrategy {
     }
 
     private void insertionSortInc(Object[] arr, Comparator comp, int begin, int end) {
-        for (int i = begin + 1; i < end; i++) {
+        for (int i = begin + 1; i <= end; i++) {
             for (int j = i; j > begin && comp.compare(arr[j], arr[j-1]) < 0; j--) {
                 Object temp = arr[j];
                 arr[j] = arr[j-1];
@@ -212,7 +212,7 @@ public class QuickSort implements SortStrategy {
     }
 
     private void insertionSortDec(Object[] arr, Comparator comp, int begin, int end) {
-        for (int i = begin + 1; i < end; i++) {
+        for (int i = begin + 1; i <= end; i++) {
             for (int j = i; j > begin && comp.compare(arr[j], arr[j-1]) > 0; j--) {
                 Object temp = arr[j];
                 arr[j] = arr[j-1];
