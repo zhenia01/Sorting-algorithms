@@ -1,84 +1,107 @@
 package sort;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.util.Arrays;
-import java.util.Comparator;
+import java.util.Random;
+
+class Stopwatch {
+    private final long start;
+    public Stopwatch() {
+        start = System.nanoTime();
+    }
+    public double elapsedTime() {
+        long now = System.nanoTime();
+        return (now - start)/1000.0;
+    }
+}
 
 public class Tester {
 
-    private static void print(Sorter sorter) {
-        Integer[] arr1 = {-10, 0, 1, -5, 6, 3, 2, -9, 5, -7, 9, 4, 10, -4, -3, -2, -1, 7, 8, -8, -6};
-        sorter.sortInc(arr1);
-        System.out.println("Sort by inc: " + Arrays.toString(arr1));
-        sorter.sortDec(arr1);
-        System.out.println("Sort by dec: " + Arrays.toString(arr1));
-
-        Worker[] arr2 = {new Worker("Masha", 1000), new Worker("Sasha", 750), new Worker("Kyrylo", 800), new Worker("Serhiy", 1100), new Worker("Adam", 100), new Worker("Ira", 500), new Worker("Zhenia", 9000), new Worker("Denys", 500), new Worker("Artem", 50), new Worker("Sofiia", 1000),};
-        sorter.sortIncComp(arr2, new Comparator<Worker>() {
-            @Override
-            public int compare(Worker o1, Worker o2) {
-                return o1.getSalary() - o2.getSalary();
-            }
-        });
-        System.out.println("Sort by salary by inc: " + Arrays.toString(arr2));
-        sorter.sortDecComp(arr2, new Comparator<Worker>() {
-            @Override
-            public int compare(Worker o1, Worker o2) {
-                return o1.getSalary() - o2.getSalary();
-            }
-        });
-        System.out.println("Sort by salary by dec: " + Arrays.toString(arr2));
-        sorter.sortIncComp(arr2, new Comparator<Worker>() {
-
-            @Override
-            public int compare(Worker o1, Worker o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        System.out.println("Sort by name by inc: " + Arrays.toString(arr2));
-        sorter.sortDecComp(arr2, new Comparator<Worker>() {
-
-            @Override
-            public int compare(Worker o1, Worker o2) {
-                return o1.getName().compareTo(o2.getName());
-            }
-        });
-        System.out.println("Sort by name by dec: " + Arrays.toString(arr2));
-        System.out.println();
-    }
-
-
     public static void main(String[] args) {
+        Random random = new Random();
+        Sorter[] sorters = {new Sorter(new BubbleSort()), new Sorter(new SelectionSort()), new Sorter(new InsertionSort()), new Sorter(new CombSort()), new Sorter(new ShellSort()), new Sorter(new QuickSort()), new Sorter(new MergeSort()), new Sorter(new HeapSort())};
 
-        Sorter sorter = new Sorter(new BubbleSort());
-        System.out.println("Bubble:");
-        print(sorter);
+        try (BufferedWriter fout = new BufferedWriter(new FileWriter("output.txt"))){
 
-        sorter.changeStrategy(new SelectionSort());
-        System.out.println("Selection:");
-        print(sorter);
+            for (int i = 0; i < sorters.length; i++) {
 
-        sorter.changeStrategy(new InsertionSort());
-        System.out.println("Insertion:");
-        print(sorter);
+                fout.write(sorters[i].sortStrategy.getClass().toString().substring(11) + "\n");
 
-        sorter.changeStrategy(new CombSort());
-        System.out.println("Comb:");
-        print(sorter);
+                fout.write("\tRandom numbers: \n");
 
-        sorter.changeStrategy(new ShellSort());
-        System.out.println("Shell:");
-        print(sorter);
+                for (int size = 1; size <= 32; size *= 2) {
+                    Integer[] arr = new Integer[1024 * size];
 
-        sorter.changeStrategy(new QuickSort());
-        System.out.println("Quick:");
-        print(sorter);
+                    for (int j = 0; j < arr.length; j++) {
+                        arr[j] = random.nextInt();
+                    }
 
-        sorter.changeStrategy(new MergeSort());
-        System.out.println("Merge:");
-        print(sorter);
+                    Stopwatch stopwatch = new Stopwatch();
+                    sorters[i].sortInc(arr);
+                    double time = stopwatch.elapsedTime();
 
-        sorter.changeStrategy(new HeapSort());
-        System.out.println("Heap:");
-        print(sorter);
+                    fout.write("\t\t" + arr.length + ": " + time + "\n");
+                }
+
+                fout.write("\tSorted by inc numbers: \n");
+
+                for (int size = 1; size <= 32; size *= 2) {
+                    Integer[] arr = new Integer[1024 * size];
+
+                    for (int j = 0; j < arr.length; j++) {
+                        arr[j] = random.nextInt();
+                    }
+
+                    sorters[5].sortInc(arr);
+
+                    Stopwatch stopwatch = new Stopwatch();
+                    sorters[i].sortInc(arr);
+                    double time = stopwatch.elapsedTime();
+
+                    fout.write("\t\t" + arr.length + ": " + time + "\n");
+                }
+
+                fout.write("\tSorted by dec numbers: \n");
+
+                for (int size = 1; size <= 32; size *= 2) {
+                    Integer[] arr = new Integer[1024 * size];
+
+                    for (int j = 0; j < arr.length; j++) {
+                        arr[j] = random.nextInt();
+                    }
+
+                    sorters[5].sortDec(arr);
+
+                    Stopwatch stopwatch = new Stopwatch();
+                    sorters[i].sortInc(arr);
+                    double time = stopwatch.elapsedTime();
+
+                    fout.write("\t\t" + arr.length + ": " + time + "\n");
+                }
+
+                fout.write("\tEqual numbers: \n");
+
+                for (int size = 1; size <= 32; size *= 2) {
+                    Integer[] arr = new Integer[1024 * size];
+
+                    int number = random.nextInt();
+
+                    for (int j = 0; j < arr.length; j++) {
+                        arr[j] = number;
+                    }
+
+                    Stopwatch stopwatch = new Stopwatch();
+                    sorters[i].sortInc(arr);
+                    double time = stopwatch.elapsedTime();
+
+                    fout.write("\t\t" + arr.length + ": " + time + "\n");
+                }
+
+
+            }
+        } catch (Exception e) {
+            System.out.println("ERROR");
+        }
     }
 }

@@ -3,7 +3,7 @@ package sort;
 import java.util.Comparator;
 
 class Sorter{
-    private SortStrategy sortStrategy;
+    public SortStrategy sortStrategy;
 
     Sorter(SortStrategy sortStrategy) {
         this.sortStrategy = sortStrategy;
@@ -28,5 +28,4 @@ class Sorter{
     public void sortDecComp(Object[] arr, Comparator comp) {
         sortStrategy.sortDecComp(arr, comp);
     }
-
 }
